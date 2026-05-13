@@ -132,6 +132,11 @@ jobs:
           cache-from: type=gha,scope=build-${{ matrix.arch }}
           cache-to: type=gha,mode=max,scope=build-${{ matrix.arch }}
 
+      - name: Verify OCI config labels
+        run: |
+          IMAGE_TAG="${{ contains(fromJSON('[\"workflow_dispatch\", \"schedule\"]'), github.event_name) && format('source-{0}-{1}', env.LLAMA_STACK_COMMIT_SHA, github.sha) || github.sha }}"
+          bash scripts/verify-config-labels.sh "${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
+
       - name: Unset cloud provider credentials for fork and Dependabot PRs (secrets not available)
         if: github.event_name == 'pull_request' && (github.event.pull_request.head.repo.fork == true || github.secret_source == 'Dependabot')
         run: |

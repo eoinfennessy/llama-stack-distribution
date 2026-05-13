@@ -22,6 +22,8 @@ RUN python3 -c "import tiktoken; tiktoken.get_encoding('cl100k_base')"
 COPY distribution/config.yaml ${APP_ROOT}/config.yaml
 COPY --chmod=755 distribution/entrypoint.sh ${APP_ROOT}/entrypoint.sh
 
+{config_labels}
+
 #TODO: remove this once we have a stable version of llama-stack
 # LLS server version is not aligned with the client version, so we disable the version check
 # Currently, LLS client version is 0.3.0, while the server version is 0.3.0rc3+rhai0
